@@ -9,19 +9,19 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 def draw_circle(event, x, y, flags, param):
     global ix, iy, drawing, mode, img
-
+    
     if event == cv2.EVENT_LBUTTONDOWN:
         drawing = True
         ix, iy = x, y
-
+    
     elif event == cv2.EVENT_MOUSEMOVE:
         if drawing == True:
             cv2.circle(img, (x, y), 5, (255, 255, 255), -1)
 
-    elif event == cv2.EVENT_LBUTTONUP:
-        drawing = False
+elif event == cv2.EVENT_LBUTTONUP:
+    drawing = False
         cv2.circle(img, (x, y), 5, (255, 255, 255), -1)
-
+    
     elif event == cv2.EVENT_RBUTTONDOWN:
         img = np.zeros((140, 140, 3), np.uint8)
 
@@ -59,7 +59,7 @@ pred = multilayer_perceptron(x, weights, biases)
 
 # LOSS AND OPTIMIZER
 cost = tf.reduce_sum(np.square(pred - y))
-optm = tf.train.GradientDescentOptimizer(learning_rate=0.001).minimize(cost)
+optm = tf.train.AdamOptimizer(learning_rate=0.001).minimize(cost)
 corr = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
 accr = tf.reduce_mean(tf.cast(corr, "float"))
 
@@ -70,8 +70,8 @@ print ("FUNCTIONS READY")
 saver = tf.train.Saver()
 
 
-training_epochs = 100
-batch_size      = 128
+training_epochs = 50
+batch_size      = 64
 display_step    = 10
 
 do_train = 0
@@ -86,7 +86,7 @@ if do_train == 1:
     testimg = mnist.test.images
     testlabel = mnist.test.labels
     print("MNIST ready")
-
+    
     # OPTIMIZE
     for epoch in range(training_epochs):
         avg_cost = 0.
@@ -107,32 +107,35 @@ if do_train == 1:
             feeds = {x: mnist.test.images, y: mnist.test.labels}
             test_acc = sess.run(accr, feed_dict=feeds)
             print ("TEST ACCURACY: %.3f" % (test_acc))
-    print ("OPTIMIZATION FINISHED")
+    
     saver_path = saver.save(sess, "save_BPNN_model/BPNN_model")
+    print ("OPTIMIZATION FINISHED")
 
 if do_train == 0:
     drawing = False
     mode = True
     ix, iy = -1, -1
-    img = np.zeros((140, 140, 3), np.uint8)
+    img = np.zeros((168, 140, 3), np.uint8)
     cv2.namedWindow('image')
     cv2.setMouseCallback('image', draw_circle)
     saver.restore(sess, "save_BPNN_model/BPNN_model")
     prediction = tf.argmax(pred, 1)
-
+    
     while(1):
         cv2.imshow('image', img)
         key = cv2.waitKey(1)
         if key == 97:
             print('Image saved')
             cv2.imwrite('aaa.jpg', img)
-            img = np.zeros((140, 140, 3), np.uint8)
-
+            img = np.zeros((168, 140, 3), np.uint8)
+            
             image = cv2.imread('aaa.jpg', 0)
             resized_image = cv2.resize(image, (28, 28))
             im = np.reshape(np.array(resized_image), (-1, 784))
             answer = prediction.eval(feed_dict={x: im}, session=sess)
             print("prediction", answer)
+
+
 
 
 

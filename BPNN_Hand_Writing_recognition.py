@@ -108,7 +108,7 @@ if do_train == 1:
             test_acc = sess.run(accr, feed_dict=feeds)
             print ("TEST ACCURACY: %.3f" % (test_acc))
     print ("OPTIMIZATION FINISHED")
-    saver_path = saver.save(sess, "save/BPNN_model")
+    saver_path = saver.save(sess, "save_BPNN_model/BPNN_model")
 
 if do_train == 0:
     drawing = False
@@ -117,7 +117,7 @@ if do_train == 0:
     img = np.zeros((140, 140, 3), np.uint8)
     cv2.namedWindow('image')
     cv2.setMouseCallback('image', draw_circle)
-    saver.restore(sess, "save/BPNN_model")
+    saver.restore(sess, "save_BPNN_model/BPNN_model")
     prediction = tf.argmax(pred, 1)
 
     while(1):

@@ -36,7 +36,7 @@ x = tf.placeholder("float", [None, n_input])
 y = tf.placeholder("float", [None, n_classes])
 
 # NETWORK PARAMETERS
-stddev = 0.01
+stddev = 0.1
 weights = {
     'w1': tf.Variable(tf.random_normal([n_input, n_hidden_1], stddev=stddev)),
     'w2': tf.Variable(tf.random_normal([n_hidden_1, n_hidden_2], stddev=stddev)),
@@ -71,7 +71,7 @@ saver = tf.train.Saver()
 
 
 training_epochs = 100
-batch_size      = 64
+batch_size      = 128
 display_step    = 10
 
 do_train = 0
@@ -108,7 +108,7 @@ if do_train == 1:
             test_acc = sess.run(accr, feed_dict=feeds)
             print ("TEST ACCURACY: %.3f" % (test_acc))
     print ("OPTIMIZATION FINISHED")
-    saver_path = saver.save(sess, "save/MNIST_100_model.ckpt")
+    saver_path = saver.save(sess, "save/BPNN_model")
 
 if do_train == 0:
     drawing = False
@@ -117,7 +117,7 @@ if do_train == 0:
     img = np.zeros((140, 140, 3), np.uint8)
     cv2.namedWindow('image')
     cv2.setMouseCallback('image', draw_circle)
-    saver.restore(sess, "save/MNIST_model.ckpt")
+    saver.restore(sess, "save/BPNN_model")
     prediction = tf.argmax(pred, 1)
 
     while(1):

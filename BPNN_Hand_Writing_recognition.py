@@ -11,16 +11,16 @@ def draw_circle(event, x, y, flags, param):
     global ix, iy, drawing, mode, img
     
     if event == cv2.EVENT_LBUTTONDOWN:
-        drawing = True
-        ix, iy = x, y
+        if drawing == True:
+            ix, iy = x, y
     
     elif event == cv2.EVENT_MOUSEMOVE:
         if drawing == True:
             cv2.circle(img, (x, y), 5, (255, 255, 255), -1)
 
-elif event == cv2.EVENT_LBUTTONUP:
-    drawing = False
-        cv2.circle(img, (x, y), 5, (255, 255, 255), -1)
+    elif event == cv2.EVENT_LBUTTONUP:
+        if drawing == False:
+            cv2.circle(img, (x, y), 5, (255, 255, 255), -1)
     
     elif event == cv2.EVENT_RBUTTONDOWN:
         img = np.zeros((140, 140, 3), np.uint8)

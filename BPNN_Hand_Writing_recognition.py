@@ -9,19 +9,19 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 def draw_circle(event, x, y, flags, param):
     global ix, iy, drawing, mode, img
-    
+
     if event == cv2.EVENT_LBUTTONDOWN:
-        if drawing == True:
-            ix, iy = x, y
-    
+        drawing = True
+        ix, iy = x, y
+
     elif event == cv2.EVENT_MOUSEMOVE:
         if drawing == True:
             cv2.circle(img, (x, y), 5, (255, 255, 255), -1)
 
     elif event == cv2.EVENT_LBUTTONUP:
-        if drawing == False:
-            cv2.circle(img, (x, y), 5, (255, 255, 255), -1)
-    
+        drawing = False
+        cv2.circle(img, (x, y), 5, (255, 255, 255), -1)
+
     elif event == cv2.EVENT_RBUTTONDOWN:
         img = np.zeros((140, 140, 3), np.uint8)
 
@@ -115,7 +115,7 @@ if do_train == 0:
     drawing = False
     mode = True
     ix, iy = -1, -1
-    img = np.zeros((168, 140, 3), np.uint8)
+    img = np.zeros((140, 140, 3), np.uint8)
     cv2.namedWindow('image')
     cv2.setMouseCallback('image', draw_circle)
     saver.restore(sess, "save_BPNN_model/BPNN_model")
@@ -127,17 +127,10 @@ if do_train == 0:
         if key == 97:
             print('Image saved')
             cv2.imwrite('aaa.jpg', img)
-            img = np.zeros((168, 140, 3), np.uint8)
+            img = np.zeros((140, 140, 3), np.uint8)
             
             image = cv2.imread('aaa.jpg', 0)
             resized_image = cv2.resize(image, (28, 28))
             im = np.reshape(np.array(resized_image), (-1, 784))
             answer = prediction.eval(feed_dict={x: im}, session=sess)
             print("prediction", answer)
-
-
-
-
-
-
-

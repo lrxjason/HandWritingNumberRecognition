@@ -21,6 +21,6 @@ The model could be download from Here: https://pan.baidu.com/s/1Ct4kSEi27s9vTu3e
 do_train = 0
 
 Click the left button on the mouse to draw a number.
-If you are not satisfy this number image, you cloud right click mouse to reset.
+If you are not satisfy this number image, you could right click mouse to reset.
 If you want to predict the current number image, you could click "a" on the keybord to see the predit value.
 
